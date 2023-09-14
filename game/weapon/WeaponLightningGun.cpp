@@ -76,7 +76,7 @@ protected:
 
 private:
 
-	void				Attack					( idEntity* ent, const idVec3& dir, float power = 1.0f );
+	void				Attack					( idEntity* ent, const idVec3& dir, float power = 100.0f ); //changed power from 1.0f to 100.f
 
 	void				UpdateChainLightning	( void );
 	void				StopChainLightning		( void );
