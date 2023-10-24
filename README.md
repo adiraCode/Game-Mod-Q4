@@ -76,7 +76,6 @@ Features will include:
 --* Meat - Chicken
 ---
 ## Download Instructions
-
-Add the folder 'Cobalt' to your q4base folder, and type 'map dmsp/q4dm4' at the console.
+      Add the folder 'Cobalt' to your q4base folder, and type 'map dmsp/q4dm4' at the console.
 ---
 *October 24, 2023*
