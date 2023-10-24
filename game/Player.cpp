@@ -8609,6 +8609,12 @@ void idPlayer::PerformImpulse( int impulse ) {
  			LastWeapon();
  			break;
  		}
+
+		case IMPULSE_41: 
+		{
+			DoWhatever();
+			break;
+		}
 	} 
 
 //RAVEN BEGIN

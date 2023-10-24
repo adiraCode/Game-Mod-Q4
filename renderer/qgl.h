@@ -23,7 +23,7 @@
 // http://oss.sgi.com/projects/ogl-sample/ABI/
 #define GL_GLEXT_LEGACY
 #define GLX_GLXEXT_LEGACY
-#include <GL/gl.h>
+#include <GL/qgl.h>
 #include <GL/glx.h>
 
 // TTimo - X.h has a '#define Success 0' line..
@@ -36,7 +36,7 @@
 
 #else
 
-#include <gl.h>
+#include <qgl.h>
 
 #endif
 

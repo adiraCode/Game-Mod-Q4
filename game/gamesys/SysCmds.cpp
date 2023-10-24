@@ -516,6 +516,57 @@ void GiveStuffToPlayer( idPlayer* player, const char* name, const char* value )
 		player->GivePowerUp( POWERUP_GUARD, -1 );
 		return;
 	}
+
+	/* Cobalt Changes*/
+	if (idStr::Icmp(name, "pink_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "yellow_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "gray_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "glow_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "ltblue_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "dkblue_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "purple_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "red_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "brown_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
+
+	if (idStr::Icmp(name, "gold_quort") == 0) {
+		player->GivePowerUp(POWERUP_GUARD, -1);
+		return;
+	}
 // RAVEN END
 
 	if ( !idStr::Icmp ( name, "wpmod_all" ) ) {
@@ -2939,6 +2990,19 @@ void Cmd_BuyItem_f( const idCmdArgs& args ) {
 
 	player->GenerateImpulseForBuyAttempt( args.Argv(1) );
 }
+
+void Cmd_Whereami_f (const idCmdArgs& args)
+{
+
+}
+
+/*
+void Cmd_SellItem_f(const idCmdArgs& args)
+{
+	idPlayer* player = gameLocal.GetLocalPlayer();
+
+}
+*/
 // RITUAL END
 
 void Cmd_PlayerEmote_f( const idCmdArgs& args ) {
