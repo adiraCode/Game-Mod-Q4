@@ -19,13 +19,14 @@ Features will include:
 ## Deliverables
 - [ ] 10 different raiseable slimes
 - [ ] 5 Different farm tools (plots, water tanks)
-- [ ] Economy system
+- [ ] Economy system [Food ammo]
 - [ ] Vaccum Gun modified from the Napalm gun
 - [ ] Five components of coffee shop to achieve the winning condition
-- [ ] A shortcut to auto launch into the mod
+      
+- [X] A shortcut to auto launch into the mod
 - [ ] An in-game HELP screen explaining how to use the features of the mod
 - [ ] Updated in game UI to showcase one or more of the mod features
-- [ ] Modified landing page for the mod
+- [X] Modified landing page for the mod
 ---
 ## Goals
 
@@ -74,4 +75,8 @@ Features will include:
 --* Veggie
 --* Meat - Chicken
 ---
-*September 28, 2023*
+## Download Instructions
+
+Add the folder 'Cobalt' to your q4base folder, and type 'map dmsp/q4dm4' at the console.
+---
+*October 24, 2023*
