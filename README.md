@@ -2,7 +2,7 @@
 ---
 ## Overview
 
-You’ve landed at your target location. The planet is desolate, quiet, and has no coffee shops anywhere! But you did not come here just for coffee. You came for slimes. Massive colonies of slimes of all types have been discovered on the planet, and it's yours for the taking. The slimes need housing and nourishment to produce the new resource Quorts that can be sold on an ever evolving exchange market. Make profit, build and improve your ranch and build the first coffee shop on this planet.
+You’ve landed at your target location. The planet is desolate, quiet, and has no coffee shops anywhere! But you did not come here just for coffee. You came for slimes. Massive colonies of slimes of all types have been discovered on the planet, and it's yours for the taking. The slimes need housing and nourishment in the form of food launched at them at high velocity to produce the new resource Quorts that can be sold on an ever evolving exchange market. Make profit, build and improve your ranch and build the first coffee shop on this planet.
 
 This is a mod made for a class.
 ---
