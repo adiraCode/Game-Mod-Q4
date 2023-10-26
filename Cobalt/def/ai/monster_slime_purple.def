@@ -1,0 +1,61 @@
+/*
+===============================================================================
+	Iron Maiden
+	Reskined for Slime Purple
+
+===============================================================================
+*/
+
+entityDef damage_slime_purple_blaster
+{
+	"inherit"							"damage_gladiator_blaster"
+}
+
+entityDef projectile_slime_purple_blaster
+{
+	"inherit"							"projectile_gladiator_blaster"
+}
+
+entityDef damage_slime_purple_railgun
+{
+	"inherit"							"damage_gladiator_railgun"
+}
+
+entityDef hitscan_slime_purple
+{
+	"inherit"							"hitscan_gladiator_railgun"
+}
+
+entityDef melee_slime_purple_new
+{
+	"inherit"							"melee_gladiator_new"
+}
+
+entityDef melee_slime_purple 
+{
+	"inherit"							"melee_gladiator"
+}
+
+entityDef melee_slime_purple_left
+{
+	"inherit"							"melee_gladiator_left"
+}
+
+entityDef melee_slime_purple_shield
+{
+	"inherit"						"melee_gladiator_shield"
+}
+
+entityDef monster_slime_purple
+{
+	"inherit"				"monster_gladiator" 			
+	"editor_usage"			"Slime Purple"				
+	"editor_ignore"			"0"						
+	"model"								"model_monster_gladiator"
+	"model2"							"models/monsters/gladiator/shield.lwo"		
+}
+
+entityDef monster_gladiator_shield 
+{
+	"inherit"				"monster_gladiator_shield"
+}

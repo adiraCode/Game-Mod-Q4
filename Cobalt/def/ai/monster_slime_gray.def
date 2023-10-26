@@ -1,0 +1,34 @@
+/*
+===============================================================================
+
+	Slime Gray
+	Inhierted from strogg_marine_mgun
+
+===============================================================================
+*/
+
+entityDef damage_slime_gray
+{
+	"inherit"					"monster_strogg_marine_mgun"
+	"damage"					"0"
+}
+
+entityDef monster_slime_yellow
+{
+	"inherit"				"monster_strogg_marine_mgun" 			// Use the machine gun guy as a base
+	"editor_usage"			"Slime Gray"				// What will display in the editor
+	"editor_ignore"			"0"						// Show the entity in the right click menu
+	"model"				"monster_strogg_marine_mgun"			// Use the mesh and anims from the machine gun guy
+	"skin"				"skins/monsters/strogg_marine/smv_machinegun"	// Leave the skin as the machine gun guy
+}
+
+entityDef monster_slime_gray_convoy
+{
+	"inherit"							"monster_strogg_marine_mgun"
+}
+
+entityDef monster_slime_gray_long_distance
+{
+	
+	"inherit"					"monster_strogg_marine_mgun"
+}
