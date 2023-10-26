@@ -1,0 +1,32 @@
+//------------------------------------------------
+// Blaster Strogg Marine
+// Reskined for Slime Pink
+
+entityDef damage_slime_pink 
+{
+	"inherit"					"damage_strogg_marine_blaster"	
+	"damage"					"0" //changed from "65" to "0"
+}
+
+entityDef projectile_slime_pink
+{
+	"inherit"							"projectile_strogg_marine_blaster"
+}
+
+entityDef melee_slime_pink_left
+{
+	"inherit"							"melee_strogg_marine_left"
+}
+
+entityDef melee_slime_pink_right
+{
+	"inherit"							"melee_strogg_marine_right"
+}
+
+entityDef monster_slime_pink
+{
+	"inherit"				"monster_strogg_marine" 			
+	"editor_usage"			"Slime Pink"				
+	"editor_ignore"			"0"						
+	"model"					"monster_strogg_marine_blaster"			
+}

@@ -1,0 +1,40 @@
+/*
+===============================================================================
+	Iron Maiden
+	Reskined for Slime Orange
+
+===============================================================================
+*/
+
+entityDef damage_slime_orange_direct
+{
+	"inherit"							"damage_iron_maiden_rocket_direct"
+}
+
+entityDef damage_slime_orange
+{
+	"inherit"					"damage_ironMaiden_banshee"
+}
+
+entityDef damage_slime_orange_splash
+{
+	"inherit"					"damage_iron_maiden_rocket_splash"
+}
+
+entityDef projectile_slime_orange
+{
+	"inherit"							"projectile_iron_maiden_rocket"
+)
+
+entityDef melee_slime_orange
+{
+	"inherit"						"melee_iron_maiden"
+}
+
+entityDef monster_slime_orange
+{
+	"inherit"				"monster_iron_maiden" 			
+	"editor_usage"			"Slime Orange"				
+	"editor_ignore"			"0"						
+	"model"					"model_monster_iron_maiden"			
+}

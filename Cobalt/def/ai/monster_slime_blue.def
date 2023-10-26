@@ -1,0 +1,35 @@
+/*
+===============================================================================
+	Sentry
+	Reskined for Slime Blue
+
+===============================================================================
+*/
+
+entityDef damage_slime_blue
+{
+	"inherit"					"damage_grunt_bullet"
+}
+
+entityDef hitscan_slime_blue
+{
+	"inherit"						"hitscan_grunt_bullet"
+}
+
+entityDef melee_slime_blue
+{
+	"inherit"					"melee_grunt"
+}
+
+entityDef melee_slime_blue
+{
+	"inherit"						"melee_grunt_leap"
+}
+
+entityDef monster_slime_blue
+{
+	"inherit"				"monster_grunt" 			
+	"editor_usage"			"Slime Blue"				
+	"editor_ignore"			"0"						
+	"model"					"model_monster_grunt"			
+}
