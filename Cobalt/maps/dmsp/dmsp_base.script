@@ -1,0 +1,352 @@
+/* =================
+ DeathmatchSinglePlayer
+ lunaran | oct 05
+ Bonus points to professor wouter "aardappel" van oortmerssen for original concept and awesome sounding name
+ 
+ See accompanying Q4SDK page for a rundown on how it all works
+================= */
+
+
+float dmsp_skill = 0;
+float dmsp_nextComboTime = -1;
+float dmsp_combo = 1;
+float dmsp_score = 0;
+
+// Create a target_null for every deathmatch spawnpoint, because func_spawners reject 
+// anything that isn't a target_null for some strange reason
+float dmsp_createSpawns()
+{
+	float i, j = 0;
+	entity spawny, newNull;
+	string namey;
+	for (i = 1; i < 64; i++) {
+		namey = ("info_player_deathmatch_" + i);
+		spawny = sys.getEntity(namey);
+		if (spawny) {
+			namey = "dudeSpawnPoint_" + j;
+			sys.setSpawnArg( "name", namey );
+			sys.setSpawnArg( "origin", spawny.getWorldOrigin() );
+			newNull = sys.spawn( "target_null" );
+			j++;
+		}
+	}
+	return j;
+}
+
+// Set spawnargs of the func_spawner to target all of the new spawn nulls
+void dmsp_setSpawns( float j )
+{
+	float i;
+	entity spawny;
+	string namey;
+	for (i = 0; i <= j; i++) {
+		namey = ("dudeSpawnPoint_" + i);
+		spawny = sys.getEntity(namey);
+		if (spawny) {
+			sys.setSpawnArg("target_" + i, namey );
+		}
+	}
+}
+
+// score!
+// take the given score and display it with the ordinarily dev-only function sys.drawText
+//  and float/shrink it per frame for extra arcade cach 
+void dmsp_scorePip ( string text, vector origin, float pipTime ) {
+	float frameTime = sys.getFrameTime();
+	float startTime = sys.getTime();
+	float i, d, score;
+	vector org = origin, color;
+	string comboType;
+
+	if (startTime <= dmsp_nextComboTime) dmsp_combo = dmsp_combo + 1;
+	else dmsp_combo = 1;
+	dmsp_nextComboTime = startTime + 2 * pipTime;	// window until combo cutoff
+
+	score = sys.strToFloat( text ) * dmsp_combo;
+	pipTime = pipTime + ( 0.25 * pipTime * ( dmsp_combo - 1 ) );
+
+	for ( i = startTime; i < (startTime + pipTime); i = i + frameTime ) {
+		d = (i - startTime) / pipTime;
+
+		// pick a lerping color & extra floaty text print based on combo level
+		// this feels kind of unwieldy but without arrays or case switches it's the best we can do
+		if (dmsp_combo == 1) { 
+			color_x = 1 - d; 		// red
+		} else if (dmsp_combo == 2) { 
+			color_x = 1 - d; 
+			color_y = 0.5 * ( 1 - d ); 	// orange
+			comboType = "Combo!";
+		} else if (dmsp_combo == 3) { 
+			color_x = 1 - d; 
+			color_y = 1 - d; 		// yellow
+			comboType = "Double Combo!";
+		} else if (dmsp_combo == 4) { 
+			color_y = 1 - d; 		// green
+			comboType = "Triple Combo!";
+		} else if (dmsp_combo == 5) { 
+			color_y = 1 - d; 
+			color_z = 1 - d; 		// cyan
+			comboType = "Super Combo!";
+		} else if (dmsp_combo == 6) { 
+			color_y = 0.5 * ( 1 - d ); 
+			color_z = 1 - d; 		// light blue
+			comboType = "Mega Combo!";
+		} else if (dmsp_combo == 7) { 
+			color_z = 1 - d; 		// deep blue
+			comboType = "Ultra Combo!";
+		} else if (dmsp_combo >= 8) { 
+			color_x = color_y = color_z = 1 - d; 	// white
+			comboType = "Holy Shit!";
+		}
+		
+		org_z = origin_z + d * 96;
+		sys.drawText( score, org, 0.5 * (1 - d), color, 1, 0 );
+		if (dmsp_combo > 1) {
+			org_z = origin_z + d * 96 + 12;
+			sys.drawText( comboType, org, 0.25 * ( 1 - d ), color, 1, 0 );
+		}
+		sys.waitFrame();
+	}
+
+	dmsp_score = dmsp_score + score;	// The only way to show the player his score is to update it in the
+	sys.println( dmsp_score );		// console since there's no way to display it on the player hud
+}
+
+// Sprinkle goodies around a given point
+void dmsp_throwLoots ( vector org, string lootClass, float cnt, float nodoubles )
+{
+	float i;
+	entity loots;
+	vector toss;
+	float dist = 128;				// radius distance to spawn goodies
+	float doubChance = 1 - ( 0.1 * dmsp_skill );	// more double drops on harder skill to keep the player stocked
+	if ( sys.random(1) > doubChance && nodoubles == 0 ) {
+		cnt = cnt * 2;				// twice the goodies
+		dist = 192;
+	}
+
+	for( i = 0; i < cnt; i++ ) {
+		toss_x = dist - sys.random(2 * dist);
+		toss_y = dist - sys.random(2 * dist);
+		toss_z = dist;
+		sys.setSpawnArg( "origin", org );
+		sys.setSpawnArg( "nodrop", 1 );
+		loots = sys.spawn( lootClass );
+		sys.waitFrame();			// wait until entity exists to set toss velocity
+		loots.setLinearVelocity( toss );
+	}
+}
+
+// check the killed monster's spawnclass and decide on a drop and score
+void dmsp_killMonster( entity victim )
+{
+	string vicType = victim.getKey( "classname" );	// what kind of monster is it?
+	vector vicOrg, vicSize, vicDrop, vicPip;
+
+	float score = (dmsp_skill + 1) * 25 * dmsp_combo;	// score on general = 4x score on easy
+	
+	vicOrg = victim.getWorldOrigin();		// where was it killed?
+	vicSize = victim.getSize();			// how big was it?  for deciding how high to toss items and print score
+	
+	vicDrop = vicOrg;
+	vicDrop_z = vicDrop_z + vicSize_z * 0.5;	// drop items waist high
+	
+	vicPip = vicOrg;
+	vicPip_z = vicPip_z + vicSize_z * 0.75;		// print score pip about head high
+
+	float val = sys.random(1);
+	if ( vicType == "monster_slime_pink" ) {
+		if ( val > 0.2 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_pi", 1, 0);
+
+		thread dmsp_scorePip( score, vicPip, 1 );
+
+	} else if ( vicType == "monster_slime_yellow" ) {
+		if ( val > 0.3 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_yw", 1, 0);
+		
+		thread dmsp_scorePip( score, vicPip, 1 );
+
+	} else if ( vicType == "monster_slime_gray" )  {
+		if ( val > 0.4 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_gy", 1, 0);
+		
+		thread dmsp_scorePip( score, vicPip, 1 );
+
+	} else if ( vicType == "monster_slime_white" ) {
+		if ( val > 0.5 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_wh", 1, 0);
+
+		score = score * 2;
+		thread dmsp_scorePip( score, vicPip, 1.25 );
+
+	} else if ( vicType == "monster_slime_blue" ) {
+		if ( val > 0.5 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_bl", 1, 0 );
+
+		score = score * 3;
+		thread dmsp_scorePip( score, vicPip, 1 );
+
+	} else if ( vicType == "monster_slime_green" ) {
+		if ( val > 0.5 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_gr", 1, 0);
+
+		score = score * 3;	
+		thread dmsp_scorePip( score, vicPip, 1 );
+
+	} else if ( vicType == "monster_slime_red" ) {
+		if ( val > 0.6 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_rd", 1, 0);
+
+		score = score * 3;
+		thread dmsp_scorePip( score, vicPip, 1 );
+	
+	} else if ( vicType == "monster_slime_orange" ) {
+		if ( val > 0.7 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_or", 1, 0);
+
+		score = score * 5;
+		thread dmsp_scorePip( score, vicPip, 1.25 );
+	
+	} else if ( vicType == "monster_slime_purple" ) {
+		if ( val > 0.7 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_pu", 1, 0);
+
+		score = score * 6;
+		thread dmsp_scorePip( score, vicPip, 1.25 );
+	
+	} else if ( vicType == "monster_slime_gold" ) {
+		if ( val > 0.9 ) dmsp_throwLoots( vicDrop, "item_health_shard_mp_gd", 1, 0);
+
+		score = score * 10;
+		thread dmsp_scorePip( score, vicPip, 1.5 );
+	}
+}
+
+// play effects on spawn so guys don't just blink into view
+// this doesn't work on every monster, because guys like monster_sentry don't have chest bones
+// but setting this up special for each skeleton isn't worth the cruft
+void dmsp_whoosh( entity me )
+{
+	me.playEffect( "fx_burn_particles_chest", "chest", 0 );
+	me.playEffect( "fx_burn_particles_chest", "head", 0 );
+	me.playEffect( "fx_burn_particles_chest", "origin", 0 );
+}
+
+// Create the func_spawner that drives the whole thing
+// All arguments must be set on the spawner when it spawns, hence spawnArgs rather than setKeys
+void dmsp_createSpawner()
+{
+	float j = dmsp_createSpawns();	// make nulls for spawn points
+
+	// high odds for puny dudes, so list them several times
+	sys.setSpawnArg("def_spawn", "monster_slime_pink");
+	sys.setSpawnArg("def_spawn_1", "monster_slime_pink");
+	sys.setSpawnArg("def_spawn_2", "monster_slime_pink");
+	sys.setSpawnArg("def_spawn_3", "monster_slime_pink");
+	sys.setSpawnArg("def_spawn_4", "monster_slime_yellow");
+	sys.setSpawnArg("def_spawn_5", "monster_slime_yellow");
+	sys.setSpawnArg("def_spawn_6", "monster_slime_yellow");
+	sys.setSpawnArg("def_spawn_7", "monster_slime_gray");
+	sys.setSpawnArg("def_spawn_8", "monster_slime_gray");
+	sys.setSpawnArg("def_spawn_9", "monster_slime_gray");
+	sys.setSpawnArg("def_spawn_10", "monster_slime_white");
+	sys.setSpawnArg("def_spawn_11", "monster_slime_white");
+
+	// medium odds for medium guys
+	sys.setSpawnArg("def_spawn_12", "monster_slime_blue");
+	sys.setSpawnArg("def_spawn_13", "monster_slime_blue");
+	sys.setSpawnArg("def_spawn_14", "monster_slime_green");
+	sys.setSpawnArg("def_spawn_15", "monster_slime_green");
+	sys.setSpawnArg("def_spawn_16", "monster_slime_red");
+	sys.setSpawnArg("def_spawn_17", "monster_slime_red");
+	sys.setSpawnArg("def_spawn_18", "monster_slime_orange");
+	sys.setSpawnArg("def_spawn_19", "monster_slime_orange");
+
+	// low odds for tough SOBs
+	sys.setSpawnArg("def_spawn_20", "monster_slime_purple");
+	sys.setSpawnArg("def_spawn_21", "monster_slime_purple");
+	sys.setSpawnArg("def_spawn_22", "monster_slime_gold");
+	
+	sys.waitFrame();
+
+	sys.setSpawnArg("max_active", j);			// assume # of spawns in map is a good monster limit
+	sys.setSpawnArg("delay", ( 5 - dmsp_skill ) );		// shorter delay on harder skill
+	sys.setSpawnArg("auto_target", "1");
+	sys.setSpawnArg("face_enemy", "1");
+	sys.setSpawnArg("skipVisible", "0");
+	sys.setSpawnArg("remove", "0");				// don't disappear from the entity list if I break this
+	// spawn_* keys are set on the spawned monster:
+	sys.setSpawnArg("spawn_neverdormant", "1");
+	sys.setSpawnArg("spawn_script_death", "dmsp_killMonster");	// for spawning loots
+	sys.setSpawnArg("spawn_script_init", "dmsp_whoosh");		// for spawning zoots
+	
+	sys.waitFrame();
+	
+	dmsp_setSpawns( j );	// set previously created nulls as possible targets
+	
+	entity dudeSpawner = sys.spawn( "func_spawner" );
+	sys.trigger(dudeSpawner);
+}
+
+void main()
+{
+	dmsp_skill = sys.strToFloat( sys.getcvar("g_skill") );
+
+	// Spawn all possible monsters and items in main to force them to cache when the map loads
+	// then remove them out of the way
+	entity tempy, tempy2, tempy3;		// three at a time so it doesn't take 30 game frames
+	
+	tempy = sys.spawn( "monster_slime_pink" );
+	tempy2 = sys.spawn( "monster_slime_yellow" );
+	tempy3 = sys.spawn( "monster_slime_gray" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "monster_slime_white" );
+	tempy2 = sys.spawn( "monster_slime_blue" );
+	tempy3 = sys.spawn( "monster_slime_green" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "monster_slime_orange" );
+	tempy2 = sys.spawn( "monster_slime_red" );
+	tempy3 = sys.spawn( "monster_slime_purple" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "monster_slime_gold" );
+	tempy2 = sys.spawn( "item_health_small_mp" );
+	tempy3 = sys.spawn( "item_health_large_mp" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "ammo_machinegun_mp" );
+	tempy2 = sys.spawn( "ammo_shotgun_mp" );
+	tempy3 = sys.spawn( "ammp_hyperblaster_mp" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "ammo_nailgun_mp" );
+	tempy2 = sys.spawn( "ammo_railgun_mp" );
+	tempy3 = sys.spawn( "ammo_lightninggun_mp" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "ammo_grenadelauncher_mp" );
+	tempy2 = sys.spawn( "ammo_rocketlauncher_mp" );
+	tempy3 = sys.spawn( "ammo_machinegun_mp" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "item_health_mega" );
+	tempy2 = sys.spawn( "item_armor_large_mp" );
+	tempy3 = sys.spawn( "item_armor_shard_mp" );
+	sys.waitFrame();
+	tempy.remove(); tempy2.remove(); tempy3.remove();
+
+	tempy = sys.spawn( "item_health_shard_mp" );
+	sys.waitFrame();
+	tempy.remove();
+	
+	sys.wait(2);
+	sys.println("Three ... ");
+	sys.wait(1);
+	sys.println("Two ... ");
+	sys.wait(1);
+	sys.println("One ... ");
+	sys.wait(1);
+	dmsp_createSpawner();
+	sys.println("Let's farm some slimes!");
+}
