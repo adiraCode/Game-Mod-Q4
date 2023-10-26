@@ -1,0 +1,56 @@
+/*
+===============================================================================
+	Sentry
+	Reskined for Slime Red
+
+===============================================================================
+*/
+
+entityDef damage_slime_red_nail
+{
+	"inherit"					"damage_gunner_nail"
+}
+
+entityDef projectile_slime_red_nail
+{
+	"inherit"					"projectile_gunner_nail"
+}
+
+entityDef damage_slime_red
+{
+	"inherit"					"damage_gunner_grenade"
+}
+
+entityDef damage_slime_red_grenade_splash
+{
+	"inherit"					"damage_gunner_grenade_splash"
+}
+
+entityDef projectile_slime_red
+{
+	"inherit"						"projectile_gunner_grenade"
+}
+
+entityDef melee_slime_red_right
+{
+	"inherit"					"melee_gunner_right"
+}
+
+entityDef melee_slime_red_left
+{
+	"inherit"					"melee_gunner_left"
+	"kickDir"					"0 -1 0"
+}
+
+entityDef melee_slime_red
+{
+	"inherit"						"melee_gunner"
+}
+
+entityDef monster_slime_red
+{
+	"inherit"				"monster_gunner" 			
+	"editor_usage"			"Slime Red"				
+	"editor_ignore"			"0"						
+	"model"					"model_monster_gunner"			
+}

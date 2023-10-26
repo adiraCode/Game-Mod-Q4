@@ -1,0 +1,59 @@
+/*
+===============================================================================
+	LightTank
+	Reskined for Slime Gold
+
+===============================================================================
+*/
+entityDef damage_slime_gold_plasma
+{
+	"inherit"					"damage_lightTank_plasma"
+}
+
+entityDef damage_slime_gold_residualPlasma
+{
+	"inherit"					"damage_lightTank_residualPlasma"
+}
+
+entityDef projectile_slime_gold_plasma
+{
+	"inherit"					"projectile_lightTank_plasma"
+}
+
+entityDef damage_slime_gold_fireball_direct
+{
+	"inherit"						"damage_lightTank_fireball_direct"
+}
+
+entityDef damage_slime_gold_fireball_splash
+{
+	"inherit"						"damage_slime_gold_fireball_splash"
+}
+
+entityDef projectile_slime_gold_fireball
+{
+	"inherit"							"projectile_lightTank_fireball"
+}
+
+entityDef melee_slime_gold
+{
+	"inherit"						"melee_lightTank"
+}
+
+entityDef melee_lightTank_popup
+{
+	"inherit"						"melee_lightTank_popup"
+}
+
+entityDef projectile_slime_gold_miniballz
+{
+	"inherit"						"projectile_lightTank_miniballz"
+}
+
+entityDef monster_slime_gold
+{
+	"inherit"				"monster_lt_tank" 			
+	"editor_usage"			"Slime Gold"				
+	"editor_ignore"			"0"						
+	"model"					"model_monster_lt_tank"			
+}

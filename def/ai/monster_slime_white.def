@@ -1,0 +1,30 @@
+/*
+===============================================================================
+	Sentry
+	Reskined for Slime White
+
+===============================================================================
+*/
+
+entityDef damage_slime_white
+{
+	"inherit"					"damage_sentry_bullet"
+}
+
+entityDef damage_slime_white
+{
+	"inherit"							"damage_sentry_bullet"
+}
+
+entityDef hitscan_slime_white
+{
+	"inherit"							"hitscan_sentry_bullet"
+}
+
+entityDef monster_slime_white
+{
+	"inherit"				"monster_sentry" 			
+	"editor_usage"			"Slime White"				
+	"editor_ignore"			"0"						
+	"model"					"monster_sentry"			
+}
