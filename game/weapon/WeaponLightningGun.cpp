@@ -7,8 +7,8 @@
 #include "../Projectile.h"
 #include "../ai/AI_Manager.h"
 
-const int	LIGHTNINGGUN_NUM_TUBES	=	3;
-const int	LIGHTNINGGUN_MAX_PATHS  =	3;
+const int	LIGHTNINGGUN_NUM_TUBES	=	5; //Changed from 3 -> 5
+const int	LIGHTNINGGUN_MAX_PATHS  =	10; //Changed from 3 -> 10
 
 const idEventDef EV_Lightninggun_RestoreHum( "<lightninggunRestoreHum>", "" );
 
@@ -76,7 +76,7 @@ protected:
 
 private:
 
-	void				Attack					( idEntity* ent, const idVec3& dir, float power = 1.0f );
+	void				Attack					( idEntity* ent, const idVec3& dir, float power = 100.0f ); //changed power from 1.0f to 100.f
 
 	void				UpdateChainLightning	( void );
 	void				StopChainLightning		( void );
@@ -308,7 +308,7 @@ void rvWeaponLightningGun::Think ( void ) {
 	// Inflict damage on all targets being attacked
 	if ( !gameLocal.isClient && gameLocal.time >= nextAttackTime ) {
 		int    i;
-		float  power = 1.0f;
+		float  power = 2.0f; //Changed from 1.0f -> 20f
 		idVec3 dir;
 		
 		owner->inventory.UseAmmo( ammoType, ammoRequired );

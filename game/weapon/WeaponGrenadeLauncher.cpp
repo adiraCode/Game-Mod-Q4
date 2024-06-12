@@ -104,7 +104,7 @@ stateResult_t rvWeaponGrenadeLauncher::State_Idle( const stateParms_t& parms ) {
 		
 		case STAGE_WAIT:			
 			if ( wsfl.lowerWeapon ) {
-				SetState ( "Lower", 4 );
+				SetState ( "Lower", 4 ); 
 				return SRESULT_DONE;
 			}		
 			if ( !clipSize ) {
@@ -119,11 +119,11 @@ stateResult_t rvWeaponGrenadeLauncher::State_Idle( const stateParms_t& parms ) {
 				}  
 						
 				if ( wsfl.attack && AutoReload() && !AmmoInClip ( ) && AmmoAvailable () ) {
-					SetState ( "Reload", 4 );
+					SetState ( "Reload", 4 ); 
 					return SRESULT_DONE;			
 				}
 				if ( wsfl.netReload || (wsfl.reload && AmmoInClip() < ClipSize() && AmmoAvailable()>AmmoInClip()) ) {
-					SetState ( "Reload", 4 );
+					SetState ( "Reload", 4 ); 
 					return SRESULT_DONE;			
 				}
 			}
@@ -186,13 +186,13 @@ stateResult_t rvWeaponGrenadeLauncher::State_Reload ( const stateParms_t& parms 
 			return SRESULT_STAGE ( STAGE_WAIT );
 			
 		case STAGE_WAIT:
-			if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) {
+			if ( AnimDone ( ANIMCHANNEL_ALL, 4 ) ) { 
 				AddToClip ( ClipSize() );
 				SetState ( "Idle", 4 );
 				return SRESULT_DONE;
 			}
 			if ( wsfl.lowerWeapon ) {
-				SetState ( "Lower", 4 );
+				SetState ( "Lower", 4 ); 
 				return SRESULT_DONE;
 			}
 			return SRESULT_WAIT;
